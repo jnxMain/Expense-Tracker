@@ -2,9 +2,11 @@ import React, { useEffect, useMemo, useState } from 'react';
 import axios from 'axios';
 import './App.css';
 
-const API_URL = 'http://localhost:5000/api/expenses';
-const AUTH_URL = 'http://localhost:5000/api/auth';
-const PROFILE_URL = 'http://localhost:5000/api/profile';
+const localApiBase = `http://${window.location.hostname}:5000/api`;
+const API_BASE_URL = process.env.REACT_APP_API_URL || (process.env.NODE_ENV === 'production' ? '/api' : localApiBase);
+const API_URL = `${API_BASE_URL}/expenses`;
+const AUTH_URL = `${API_BASE_URL}/auth`;
+const PROFILE_URL = `${API_BASE_URL}/profile`;
 const CURRENCY = new Intl.NumberFormat('en-PH', { style: 'currency', currency: 'PHP' });
 const categories = ['Food & Dining', 'Housing & Utilities', 'Transportation', 'Subscriptions', 'Health', 'Other'];
 

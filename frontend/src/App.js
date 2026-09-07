@@ -3,7 +3,8 @@ import axios from 'axios';
 import './App.css';
 
 const localApiBase = `http://${window.location.hostname}:5000/api`;
-const API_BASE_URL = process.env.REACT_APP_API_URL || (process.env.NODE_ENV === 'production' ? '/api' : localApiBase);
+const renderApiBase = 'https://expense-tracker-backend-1-zs7r.onrender.com/api';
+const API_BASE_URL = process.env.REACT_APP_API_URL || (process.env.NODE_ENV === 'production' ? renderApiBase : localApiBase);
 const API_URL = `${API_BASE_URL}/expenses`;
 const AUTH_URL = `${API_BASE_URL}/auth`;
 const PROFILE_URL = `${API_BASE_URL}/profile`;

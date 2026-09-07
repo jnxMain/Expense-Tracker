@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Personal Expense Tracker</title>
+    <style>
+        :root {
+            --bg-color: #f4f6f9;
+            --card-bg: #ffffff;
+            --primary: #2563eb;
+            --text-dark: #1e293b;
+            --text-muted: #64748b;
+            --border: #e2e8f0;
+            --danger: #ef4444;
+            --success: #10b981;
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; }
+        body { background-color: var(--bg-color); color: var(--text-dark); padding: 20px; }
+        .container { max-width: 1100px; margin: 0 auto; }
+        
+        header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px; }
+        h1 { font-size: 1.5rem; color: var(--text-dark); }
+
+        /* Dashboard Overview */
+        .dashboard { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 16px; margin-bottom: 24px; }
+        .card { background: var(--card-bg); padding: 20px; border-radius: 8px; border: 1px solid var(--border); }
+        .card h3 { font-size: 0.85rem; color: var(--text-muted); text-transform: uppercase; margin-bottom: 8px; }
+        .card .amount { font-size: 1.5rem; font-weight: bold; }
+        .card .amount.income { color: var(--success); }
+        .card .amount.expense { color: var(--danger); }
+
+        /* Main Grid Layout */
+        .main-grid { display: grid; grid-template-columns: 1fr 2fr; gap: 24px; }
+        @media (max-width: 768px) { .main-grid { grid-template-columns: 1fr; } }
+
+        /* Forms & Tables */
+        form { display: flex; flex-direction: column; gap: 12px; }
+        .form-group { display: flex; flex-direction: column; gap: 4px; }
+        label { font-size: 0.85rem; font-weight: 600; color: var(--text-dark); }
+        input, select, button { padding: 10px; border-radius: 6px; border: 1px solid var(--border); font-size: 0.9rem; }
+        input:focus, select:focus { outline: 2px solid var(--primary); }
+        button { background-color: var(--primary); color: white; border: none; font-weight: 600; cursor: pointer; transition: background 0.2s; }
+        button:hover { background-color: #1d4ed8; }
+
+        /* Tabs */
+        .nav-tabs { display: flex; gap: 8px; border-bottom: 2px solid var(--border); margin-bottom: 16px; }
+        .tab-btn { background: none; border: none; padding: 8px 16px; font-weight: 600; color: var(--text-muted); border-bottom: 2px solid transparent; margin-bottom: -2px; border-radius: 0; }
+        .tab-btn.active { color: var(--primary); border-bottom-color: var(--primary); }
+
+        /* Table Styling */
+        table { width: 100%; border-collapse: collapse; margin-top: 8px; }
+        th, td { text-align: left; padding: 10px; border-bottom: 1px solid var(--border); font-size: 0.85rem; }
+        th { background-color: #f8fafc; color: var(--text-muted); font-weight: 600; }
+        .action-btn { background: none; border: none; color: var(--danger); cursor: pointer; font-size: 0.85rem; }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <header>
+        <h1>Expense Tracker App</h1>
+    </header>
+
+    <!-- Dashboard Summary -->
+    <div class="dashboard">
+        <div class="card">
+            <h3>Monthly Budget Target</h3>
+            <div class="amount" id="display-budget">₱0.00</div>
+        </div>
+        <div class="card">
+            <h3>Total Spent</h3>
+            <div class="amount expense" id="display-spent">₱0.00</div>
+        </div>
+        <div class="card">
+            <h3>Remaining Balance</h3>
+            <div class="amount income" id="display-remaining">₱0.00</div>
+        </div>
+    </div>
+
+    <div class="main-grid">
+        <!-- Sidebar: Set Budget & Add Entry -->
+        <div style="display: flex; flex-direction: column; gap: 20px;">
+            <div class="card">
+                <h3>Set Monthly Budget</h3>
+                <form id="budget-form" style="margin-top: 10px;">
+                    <div class="form-group">
+                        <label>Monthly Budget Limit (₱)</label>
+                        <input type="number" id="budget-input" placeholder="e.g. 15000" step="0.01" required>
+                    </div>
+                    <button type="submit">Save Budget</button>
+                </form>
+            </div>
+
+            <div class="card">
+                <h3>Log New Entry</h3>
+                <form id="tracker-form" style="margin-top: 10px;">
+                    <div class="form-group">
+                        <label>Entry Type</label>
+                        <select id="type-input">
+                            <option value="expense">Daily Expense</option>
+                            <option value="bill">Bill / Subscription</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Description</label>
+                        <input type="text" id="desc-input" placeholder="e.g. Groceries, Netflix" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Category</label>
+                        <select id="category-input">
+                            <option value="Food & Dining">Food & Dining</option>
+                            <option value="Housing & Utilities">Housing & Utilities</option>
+                            <option value="Transportation">Transportation</option>
+                            <option value="Subscriptions">Subscriptions</option>
+                            <option value="Personal / Shopping">Personal / Shopping</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Amount (₱)</label>
+                        <input type="number" id="amount-input" placeholder="0.00" step="0.01" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Date / Due Date</label>
+                        <input type="date" id="date-input" required>
+                    </div>
+                    <button type="submit">Add Entry</button>
+                </form>
+            </div>
+        </div>
+
+        <!-- Main Content Area: Views -->
+        <div class="card">
+            <div class="nav-tabs">
+                <button class="tab-btn active" onclick="switchTab('expenses')">Daily Expense Log</button>
+                <button class="tab-btn" onclick="switchTab('bills')">Bills & Subscriptions</button>
+            </div>
+
+            <!-- Expenses Table -->
+            <div id="expenses-view">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Date</th>
+                            <th>Description</th>
+                            <th>Category</th>
+                            <th>Amount</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody id="expense-list"></tbody>
+                </table>
+            </div>
+
+            <!-- Bills Table -->
+            <div id="bills-view" style="display: none;">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Due Date</th>
+                            <th>Subscription/Bill</th>
+                            <th>Category</th>
+                            <th>Amount</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody id="bill-list"></tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    let budget = parseFloat(localStorage.getItem('app_budget')) || 0;
+    let entries = JSON.parse(localStorage.getItem('app_entries')) || [];
+
+    // Initialize App
+    document.addEventListener('DOMContentLoaded', () => {
+        document.getElementById('date-input').valueAsDate = new Date();
+        render();
+    });
+
+    // Handle Budget Set
+    document.getElementById('budget-form').addEventListener('submit', (e) => {
+        e.preventDefault();
+        budget = parseFloat(document.getElementById('budget-input').value) || 0;
+        localStorage.setItem('app_budget', budget);
+        document.getElementById('budget-input').value = '';
+        render();
+    });
+
+    // Handle Adding New Entry
+    document.getElementById('tracker-form').addEventListener('submit', (e) => {
+        e.preventDefault();
+        const newEntry = {
+            id: Date.now(),
+            type: document.getElementById('type-input').value,
+            desc: document.getElementById('desc-input').value,
+            category: document.getElementById('category-input').value,
+            amount: parseFloat(document.getElementById('amount-input').value),
+            date: document.getElementById('date-input').value
+        };
+
+        entries.push(newEntry);
+        localStorage.setItem('app_entries', JSON.stringify(entries));
+        
+        // Reset inputs
+        document.getElementById('desc-input').value = '';
+        document.getElementById('amount-input').value = '';
+        render();
+    });
+
+    // Delete Entry
+    function deleteEntry(id) {
+        entries = entries.filter(item => item.id !== id);
+        localStorage.setItem('app_entries', JSON.stringify(entries));
+        render();
+    }
+
+    // Tab Switching
+    function switchTab(tab) {
+        const expenseView = document.getElementById('expenses-view');
+        const billView = document.getElementById('bills-view');
+        const buttons = document.querySelectorAll('.tab-btn');
+
+        if (tab === 'expenses') {
+            expenseView.style.display = 'block';
+            billView.style.display = 'none';
+            buttons[0].classList.add('active');
+            buttons[1].classList.remove('active');
+        } else {
+            expenseView.style.display = 'none';
+            billView.style.display = 'block';
+            buttons[0].classList.remove('active');
+            buttons[1].classList.add('active');
+        }
+    }
+
+    // Render Data to UI
+    function render() {
+        const expenseList = document.getElementById('expense-list');
+        const billList = document.getElementById('bill-list');
+        
+        expenseList.innerHTML = '';
+        billList.innerHTML = '';
+
+        let totalSpent = 0;
+
+        entries.forEach(entry => {
+            if (entry.type === 'expense') totalSpent += entry.amount;
+
+            const row = document.createElement('tr');
+            row.innerHTML = `
+                <td>${entry.date}</td>
+                <td>${entry.desc}</td>
+                <td>${entry.category}</td>
+                <td>₱${entry.amount.toLocaleString('en-PH', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</td>
+                <td><button class="action-btn" onclick="deleteEntry(${entry.id})">Delete</button></td>
+            `;
+
+            if (entry.type === 'expense') {
+                expenseList.appendChild(row);
+            } else {
+                billList.appendChild(row);
+            }
+        });
+
+        // Update Summary Cards
+        const remaining = budget - totalSpent;
+        document.getElementById('display-budget').innerText = `₱${budget.toLocaleString('en-PH', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
+        document.getElementById('display-spent').innerText = `₱${totalSpent.toLocaleString('en-PH', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
+        
+        const remainingEl = document.getElementById('display-remaining');
+        remainingEl.innerText = `₱${remaining.toLocaleString('en-PH', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
+        remainingEl.style.color = remaining < 0 ? 'var(--danger)' : 'var(--success)';
+    }
+</script>
+
+</body>
+</html>

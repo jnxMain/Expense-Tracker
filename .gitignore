@@ -1,0 +1,15 @@
+# Dependencies
+node_modules/
+
+# Environment and secrets
+.env
+.env.*
+!.env.example
+
+# Generated output
+build/
+coverage/
+
+# OS and logs
+.DS_Store
+npm-debug.log*

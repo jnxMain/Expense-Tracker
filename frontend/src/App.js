@@ -28,6 +28,7 @@ function App() {
   });
   const [authMode, setAuthMode] = useState('login');
   const [authForm, setAuthForm] = useState({ name: '', email: '', password: '' });
+  const [passwordVisible, setPasswordVisible] = useState(false);
   const [authError, setAuthError] = useState('');
   const [authLoading, setAuthLoading] = useState(Boolean(session));
   const [period, setPeriod] = useState('month');
@@ -250,11 +251,11 @@ function App() {
         <form className="auth-form" onSubmit={handleAuth}>
           {authMode === 'signup' && <label>Full name<input aria-label="Full name" type="text" value={authForm.name} onChange={e => setAuthForm({ ...authForm, name: e.target.value })} required /></label>}
           <label>Email address<input aria-label="Email address" type="email" value={authForm.email} onChange={e => setAuthForm({ ...authForm, email: e.target.value })} required /></label>
-          <label>Password<input aria-label="Password" type="password" minLength="8" value={authForm.password} onChange={e => setAuthForm({ ...authForm, password: e.target.value })} required /><small>Use at least 8 characters.</small></label>
+          <label>Password<div className="password-field"><input aria-label="Password" type={passwordVisible ? 'text' : 'password'} minLength="8" value={authForm.password} onChange={e => setAuthForm({ ...authForm, password: e.target.value })} required /><button className="password-toggle" type="button" onClick={() => setPasswordVisible(current => !current)} aria-label={passwordVisible ? 'Hide password' : 'Show password'}>{passwordVisible ? 'Hide' : 'Show'}</button></div><small>Use at least 8 characters.</small></label>
           {authError && <p className="auth-error" role="alert">{authError}</p>}
           <button className="primary-button auth-button" type="submit">{authMode === 'login' ? 'Log in' : 'Create account'} <span>→</span></button>
         </form>
-        <button className="auth-switch" onClick={() => { setAuthMode(authMode === 'login' ? 'signup' : 'login'); setAuthError(''); }}>{authMode === 'login' ? 'Need an account? Sign up' : 'Already have an account? Log in'}</button>
+        <button className="auth-switch" onClick={() => { setAuthMode(authMode === 'login' ? 'signup' : 'login'); setAuthError(''); setPasswordVisible(false); }}>{authMode === 'login' ? 'Need an account? Sign up' : 'Already have an account? Log in'}</button>
       </section>
       <aside className="auth-aside"><span className="auth-aside-mark">{BRAND_NAME}</span><h2>Simple money habits.</h2><p>Track what matters without the noise.</p></aside>
     </main>

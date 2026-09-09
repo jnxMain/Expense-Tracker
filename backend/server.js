@@ -101,6 +101,18 @@ app.post('/api/expenses', requireAuth, async (req, res) => {
     catch (err) { res.status(400).json({ error: err.message }); }
 });
 
+app.put('/api/expenses/:id', requireAuth, async (req, res) => {
+    try {
+        const updated = await Expense.findOneAndUpdate(
+            { _id: req.params.id, user: req.userId },
+            { $set: req.body },
+            { new: true, runValidators: true }
+        );
+        if (!updated) return res.status(404).json({ error: 'Transaction not found' });
+        res.json(updated);
+    } catch (err) { res.status(400).json({ error: err.message }); }
+});
+
 app.delete('/api/expenses/:id', requireAuth, async (req, res) => {
     try {
         const result = await Expense.deleteOne({ _id: req.params.id, user: req.userId });

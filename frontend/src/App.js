@@ -242,7 +242,7 @@ function App() {
   if (!session) return (
     <main className="auth-shell">
       <section className="auth-panel">
-        <div className="brand auth-brand"><span className="brand-mark">{BRAND_NAME}</span><span>JNX Expense Tracker</span></div>
+        <div className="brand auth-brand"><img className="brand-logo" src="/jet-logo.jpg" alt="JET logo" /><span>JNX Expense Tracker</span></div>
         <p className="eyebrow">Sign in</p>
         <h1>{authMode === 'login' ? 'Welcome back.' : 'Start tracking.'}</h1>
         <p className="auth-subtitle">Keep your spending, budgets, and goals in one calm place.</p>
@@ -262,7 +262,7 @@ function App() {
   return (
     <div className="app-shell">
       <aside className="sidebar">
-        <div className="brand"><span className="brand-mark">{BRAND_NAME}</span><span>JNX Expense Tracker</span></div>
+        <div className="brand"><img className="brand-logo" src="/jet-logo.jpg" alt="JET logo" /><span>JNX Expense Tracker</span></div>
         <p className="sidebar-caption">Money, simplified.</p>
         <nav className="nav-list" aria-label="Main navigation">
           <button className={activeView === 'overview' ? 'nav-item active' : 'nav-item'} onClick={() => setActiveView('overview')}>◈ <span>Overview</span></button>

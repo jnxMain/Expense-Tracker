@@ -86,6 +86,7 @@ app.put('/api/profile', requireAuth, async (req, res) => {
         if (Number.isFinite(Number(req.body.savings.current))) updates['savings.current'] = Number(req.body.savings.current);
         if (Number.isFinite(Number(req.body.savings.target))) updates['savings.target'] = Number(req.body.savings.target);
     }
+    if (req.body.income && Number.isFinite(Number(req.body.income.current))) updates['income.current'] = Number(req.body.income.current);
     if (typeof req.body.notes === 'string') updates.notes = req.body.notes.slice(0, 5000);
     const profile = await Profile.findOneAndUpdate({ user: req.userId }, { $set: updates, $setOnInsert: { user: req.userId } }, { new: true, upsert: true });
     res.json(profile);

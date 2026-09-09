@@ -366,7 +366,7 @@ h2 {
 }
 .entry-form {
   display: grid;
-  grid-template-columns: 1.5fr .8fr 1fr .8fr auto;
+  grid-template-columns: 1.5fr .8fr 1fr .8fr .8fr auto;
   gap: 8px;
   margin: 20px 0 12px;
 }
@@ -387,6 +387,7 @@ th {
   font-size: 0.62rem;
 }
 td { color: #ddd2ff; }
+td:first-child { color: var(--ink); }
 .description-cell { color: var(--ink); font-weight: 700; }
 .category-pill {
   color: #147e9f;
@@ -700,7 +701,7 @@ td { color: #ddd2ff; }
   .budget-card-detail .metric-foot { color: var(--ink); font-weight: 500; }
   .budget-donut { width: 72px; height: 72px; flex-basis: 72px; }
   .content-grid { gap: 10px; margin-top: 10px; }
-  .budget-panel { display: none; }
+  .budget-panel { display: block; }
   .panel { padding: 15px; border-radius: 18px; }
   .panel-heading { margin-bottom: 14px; }
   .analysis-panel { order: 1; }
@@ -736,11 +737,6 @@ td { color: #ddd2ff; }
   .notes-panel { margin-top: 10px; }
   .notes-panel .notes-input { min-height: 72px; margin-top: 0; }
   .notes-panel .notes-button { margin-top: 8px; width: 100%; }
-  .mobile-actions { display: grid; gap: 10px; margin: 16px 0 4px; }
-  .mobile-targets-button, .mobile-add-button { width: 100%; border-radius: 12px; padding: 10px; font-weight: 700; }
-  .mobile-targets-button { border: 0; background: #278db9; color: #fff; font-size: 0.95rem; }
-  .mobile-add-button { border: 0; background: #198bb9; color: #fff; font-size: 0.95rem; box-shadow: 0 6px 14px rgba(25, 139, 185, 0.25); }
-  .mobile-add-button span { display: inline-grid; place-items: center; width: 32px; height: 32px; margin-right: 7px; border-radius: 50%; background: #40acd2; font-size: 1.5rem; vertical-align: middle; }
   .entry-form {
     grid-template-columns: 1fr 1fr;
     gap: 8px;
